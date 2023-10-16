@@ -21,7 +21,7 @@ class Catalogue {
     const removedProduct = this.findProductById(id);
     if (removedProduct) {
       this.products = this.products.filter(
-        (product) => product.id === id
+        (product) => product.id !== id
       );
     }
     return removedProduct;
@@ -29,11 +29,9 @@ class Catalogue {
 
   checkReorders() {
     const result = { type: "Reorder", productIds: [] };
-    this.products.forEach( (p) => {
-      if (p.quantityInStock <= p.reorderLevel) {
-        result.productIds.push(p.id);
-      }
-    });
+    result.productIds = this.products
+      .filter((p) => p.quantityInStock <= p.reorderLevel)
+      .map((p) => p.id);
     return result;
   }
 
